@@ -35,13 +35,16 @@ auto_param_sim
 
 
 pow_process	
-	Questo script elabora file provenienti da Synopsys 
-	che descrivono le transizioni dei segnali all'interno
-	di un circuito digitale, dato quindi il clock lo 
-	script elabora la switching activity dei vari nodi
-	indicati da linea di comando.
-	La frequenza di clock e il numero di transizioni
-	totale è preso dal file senza che venga specificato
-	ciò vuol dire che se 
-
+		[Description]
+		Questo script elabora file provenienti da Synopsys 
+		che descrivono le transizioni dei segnali all'interno
+		di un circuito digitale, dato quindi il clock lo 
+		script elabora la switching activity dei vari nodi
+		indicati da linea di comando.
+		La frequenza di clock e il numero di transizioni
+		totale è preso dal file senza che venga specificato
+		ciò vuol dire che se 
+	[SYNOPSYS]
+		
+	
 "
