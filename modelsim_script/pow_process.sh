@@ -8,30 +8,59 @@ if test $# -lt 4; then
 	Usage
 	exit 1
 fi
+# salvo in modo diverso gli argomenti per processarli
+TEMP=`getopt -o :hf:s:c:e: --long help,file:,signal:,clk:,processed_end: -- "$@"`
+# risetto gli argomenti da linea di comando
+eval set -- "$TEMP"
+# flag per sapere se ho sia il file che il nome dei segnali
+let vf=0; let vs=0;
 
-while getopts ":hf:s:" opt; do
-	case ${opt} in
-		h)
+echo "Input argument"
+# default
+clk_name="clk"
+processed_end="-proc"
+while true; do
+	case $1 in
+		-h|--help)
 			Usage 1>&2
 			exit 0
 			;;
-		f)
-			script_name=$(echo $OPTARG | cut -d "." -f 1)
-			script_name=$(echo "$script_name-proc.txt")
+		-f|--file-name)
+			name=$2
+			script_name=$(echo $2 | cut -d "." -f 1); shift 2;
+			echo "	File di potenza: $name -> $script_name"
+			let vf=1
 			;;
-		s)
+		-s|--signal)
 			set -f; IFS=","
-			sig=($OPTARG)
+			sig=($2)
+			echo "	Signal: ${sig[@]}"; shift 2;
+			let vs=1
 			;;
-		\?)
-			echo "Error" 1>&2
-			Usage 1>$2
-			exit 1
+		-c|--clk)
+			clk_name=$2	
+			echo "	Clk_name: $clk_name"; shift 2;
 			;;
+		-e|--processed-end)
+			processed_end=$2
+			echo "	Processed file ending: $script_end"; shift 2;
+			;;
+		--)
+			shift; break
+			;;
+		*)
+			echo "Error!" 1>$2
+			Usage;;
 	esac
 done
 shift $((OPTIND-1))
+if [[ vf -eq 0 ]] || [[ vs -eq 0 ]]; then
+		echo "Error!" 1>&2
+		Usage
+		exit 1
+fi
 
+script_name=$(echo "$script_name$processed_end.txt");
 
 let ESWTOT=0
 std_vector_or_signal () {
@@ -48,7 +77,8 @@ print_prob () {
    # salto i primi due argomenti per prendere solo le probabilità
    shift
    for i in $@; do
-   		printf "%8.4f" "$i" >> $script_name
+	    if [ ${i:0:1} = "." ]; then i=$(echo "0$i"); fi
+   		printf "%10s" "$i" >> $script_name
    done
    echo "" >> $script_name
 }
@@ -61,7 +91,7 @@ f_Ttot () {
 f_commutazioni_clk () {
    #  nome file
    #let Tc=$(cat  | awk '{if(NR==7)print }')
-   let Tc=$(cat $1 | grep $clk_name | awk '{print }')
+   let Tc=$(cat $1 | grep $clk_name | awk '{print $2}')
    echo $Tc
 }
 f_Tc () {
@@ -85,12 +115,12 @@ f_T0 () {
 f_prob_of_0or1 () {
    #  T1
    #  T totale della sim
-   printf "%.4f" $(echo $1/$2 | bc -l)
+   echo "scale=4;$1/$2" | bc -l
 }
 f_Esw () {
    #  Tc ossia commutazioni del segnale di cui voglio la Esw
    #  commutazioni del clock
-   printf "%.4f" $(echo 2*$1/$2| bc -l)
+   echo "scale=4;2*$1/$2"| bc -l
 }
 
 signal_prob () {
@@ -98,37 +128,44 @@ signal_prob () {
    #  nome COMPLETO UNIVOCO del segnale
    let Ttot=$(f_Ttot $1)
    let Tc=$(f_Tc  $1 $2)
-   let Commutazioni_clk=$(f_commutazioni_clk $1)
    let T1=$(f_T1  $1 $2)
    let T0=$(f_T0  $1 $2)
    P1=$(f_prob_of_0or1 $T1 $Ttot)
    P0=$(f_prob_of_0or1 $T0 $Ttot)
    Esw=$(f_Esw $Tc $Commutazioni_clk)
-   ESWTOT=$(printf "%.4f" $(echo $ESWTOT+$Esw | bc -l))
+   ESWTOT=$(echo "scale=4;$ESWTOT+$Esw" | bc -l)
    print_prob  $2 $P1 $P0 $Esw
-   echo "$1: |$2: |Ttot:$Ttot |Tc:$Tc |Comm:$Commutazioni_clk |T1:$T1 |T0:$T0 |P1:$P1 |P0:$P0 |Esw:$Esw"
+   echo "   Ttot:$Ttot |Tc:$Tc |T1:$T1 |T0:$T0 |P1:$P1 |P0:$P0 |Esw:$Esw"
 }
 
 std_vector_prob () {
    #  nome file
    #  nome del segnale
    # trovo tutti i segnali
-   signal=$(cat $1 | grep $2 |awk '{print $1}')
-   for i in $signal; do
+   signal_temp=$(cat $1 | grep $2 |awk '{print $1}' | tr "\n" " ")
+   set -f; IFS=" "
+   signal=($signal_temp)
+   let count=0
+   echo "Segnali:"
+   for i in ${signal[@]}; do
+	    echo -n "	Segnale $count: $i "
     	printf "%40s" $i >> $script_name	
    		# per ogni segnale stampo le sue caratteristiche
-		signal_prob  $i 
+		signal_prob $1  $i 
+		let count++
    done
 }
 
-echo " " > $script_name
-printf "%40s%8s%8s%8s\n" "nome    |" "P1  |" "P0  |" "Esw  |" >> $script_name
-name=
-clk_name=
+echo -e "Power Report Processing for Switching Activity\n" > $script_name
+printf "%40s%10s%10s%10s\n" "nome    |" "P1    |" "P0    |" "Esw    |" >> $script_name
+let Commutazioni_clk=$(f_commutazioni_clk $name)
+echo "	Commutazioni_clk: $Commutazioni_clk"
+
 for signal_name in ${sig[@]}; do
-	echo $signal_name
 	let ESWTOT=0
 	std_vector_prob $name $signal_name
-	echo "Esw totale:$ESWTOT"
-	printf "%64.4f  %s\n" "$ESWTOT" "Esw($signal_name) tot">> $script_name
+	echo "Switching activity"
+	echo "	Esw totale:$ESWTOT"
+	printf "%70.4s  %s\n" "$ESWTOT" "Esw($signal_name) tot">> $script_name
 done
+echo "By ER" >> $script_name
