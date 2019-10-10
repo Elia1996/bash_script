@@ -1,0 +1,17 @@
+.\" Manpage for pow_processing.
+.\" Contact eliaribaldone@gmail.com to correct errors or typos.
+.TH man 1 "11/10/2019" "1.0" "pow_process man page"
+.SH NAME
+pow_process \- calculation of switching activity
+.SH SYNOPSIS
+pow_process [OPTION]
+.SH DESCRIPTION
+Pow_process elaborate a switching activity file and calculate switching ac
+.SH OPTIONS
+The nuseradd does not take any options. However, you can supply username.
+.SH SEE ALSO
+useradd(8), passwd(5), nuseradd.debian(8) 
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Vivek Gite (vivek@nixcraft.net.in)
