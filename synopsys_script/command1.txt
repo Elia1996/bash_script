@@ -1,0 +1,3 @@
+gui_start
+analyze -library WORK -format vhdl {/home/lp19.10/Desktop/lab2/syn/fsm_gray.vhd /home/lp19.10/Desktop/lab2/syn/dpadder.vhd /home/lp19.10/Desktop/lab2/syn/FSM_ADDER.vhd}
+elaborate FSM_ADDER -architecture BEHAVIORAL -library WORK
