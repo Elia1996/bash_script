@@ -9,7 +9,7 @@ if test $# -lt 4; then
 	exit 1
 fi
 # salvo in modo diverso gli argomenti per processarli
-TEMP=`getopt -o :hf:s:c:e: --long help,file:,signal:,clk:,processed_end: -- "$@"`
+TEMP=`getopt -o :hf:s:c:e: --long help,file:,signal:,clk:,new-script-end -- "$@"`
 # risetto gli argomenti da linea di comando
 eval set -- "$TEMP"
 # flag per sapere se ho sia il file che il nome dei segnali
@@ -27,7 +27,7 @@ while true; do
 			;;
 		-f|--file-name)
 			name=$2
-			script_name=$(echo $2 | cut -d "." -f 1); shift 2;
+			script_name=$(echo $2 | cut -d "." -f 1)
 			echo "	File di potenza: $name -> $script_name"
 			let vf=1
 			;;
@@ -60,7 +60,7 @@ if [[ vf -eq 0 ]] || [[ vs -eq 0 ]]; then
 		exit 1
 fi
 
-script_name=$(echo "$script_name$processed_end.txt");
+script_name=$(echo "$script_name$processed_end.txt"); shift 2;
 
 let ESWTOT=0
 std_vector_or_signal () {
@@ -125,20 +125,17 @@ f_Esw () {
 
 signal_prob () {
    #  nome file
-   # commutazioni del segnale totali
+   #  nome COMPLETO UNIVOCO del segnale
+   let Ttot=$(f_Ttot $1)
    let Tc=$(f_Tc  $1 $2)
-   # Tempo del segnale a 1
    let T1=$(f_T1  $1 $2)
-   # Tempo del segnale a 0
    let T0=$(f_T0  $1 $2)
-   # Probabilità che il segnale sia a 1
    P1=$(f_prob_of_0or1 $T1 $Ttot)
-   # Probabilità che il segnale sia a 0
    P0=$(f_prob_of_0or1 $T0 $Ttot)
    Esw=$(f_Esw $Tc $Commutazioni_clk)
    ESWTOT=$(echo "scale=4;$ESWTOT+$Esw" | bc -l)
    print_prob  $2 $P1 $P0 $Esw
-   echo "   |Tc:$Tc |T1:$T1 |T0:$T0 |P1:$P1 |P0:$P0 |ESW:$Esw"
+   echo "   Ttot:$Ttot |Tc:$Tc |T1:$T1 |T0:$T0 |P1:$P1 |P0:$P0 |Esw:$Esw"
 }
 
 std_vector_prob () {
@@ -160,12 +157,9 @@ std_vector_prob () {
 }
 
 echo -e "Power Report Processing for Switching Activity\n" > $script_name
-printf "%40s%10s%10s%10s\n" "nome    |" "P1    |" "P0    |" "ESW    |" >> $script_name
+printf "%40s%10s%10s%10s\n" "nome    |" "P1    |" "P0    |" "Esw    |" >> $script_name
 let Commutazioni_clk=$(f_commutazioni_clk $name)
 echo "	Commutazioni_clk: $Commutazioni_clk"
-#  nome COMPLETO UNIVOCO del segnale
-let Ttot=$(f_Ttot $1)
-echo "	Ttot: $Ttot"
 
 for signal_name in ${sig[@]}; do
 	let ESWTOT=0
