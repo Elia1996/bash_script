@@ -7,8 +7,9 @@ Print_verbose () {
 		fi
 }
 Usage () {
-	   echo "sepf -f file_name -d dest_file -p Y,YMB -n 10,1996 [OPTION]"
-	   echo "man_sepf for man"
+	echo "Usage:"
+	   echo "	sepf -f file_name -d dest_file -p Y,YMB -n 10,1996 [OPTION]"
+	   echo "	man_sepf for man"
 }
 
 check_file () {
@@ -24,7 +25,6 @@ check_file () {
 # Sub Elaborate Parametric File
 TEMP=`getopt -o :vf:d:ep:n:o --long verbose,file:,dest:,elaborate,par_name:,par_val:,overwrite -- "$@"`
 eval set -- "$TEMP"
-echo $@
 
 ## variabili #############
 elab=0
@@ -102,17 +102,17 @@ while true; do
 	esac
 done
 
-if [[ $overwrite = 0 ]]; then 
-	cp $script_nm $script_nm_out; 
-else
-	script_nm_out=$script_nm;
-fi
 
 if [[ $script_nm = 0 ]] || [[ $par_names = 0 ]] || [[ $par_values = 0 ]]; then
 	echo "Errore, pochi parametri:"
 	echo "	$script_nm, $par_names, $par_values"
 	Usage
 	exit ;
+fi
+if [[ $overwrite = 0 ]]; then 
+	cp $script_nm $script_nm_out; 
+else
+	script_nm_out=$script_nm;
 fi
 Print_verbose "###  End of argument  ####" $verbose
 
