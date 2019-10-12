@@ -1,0 +1,23 @@
+.\"~/script/modelsim_script/auto_vsim.sh
+.\" Manpages for auto_vsim
+.\" contact ribaldoneelia@gmai.com	to correct bugs
+.TH man 1 "12/10/2019" "1.0" "auto_vsim man page"
+.SH NAME
+auto_vsim \- simulazioni automatiche in modelsim
+.SH SYNOPSIS
+auto_vsim -f file.do
+.SH DESCRIPTION
+This program needs to automatize debugging process of a digital circuit described in vhdl/verilog through modelsim, in fact given a file.do this program execute it in modelsim without open GUI. It is extremly useful for testbench simulation in which we are interested in output file of dut.
+.TP
+\fB\-f\fR, \fB\-\-file\fR
+This have been a file.do that will be passed to modelsim and used to simulate circuit in vhdl.
+.SH OPTION
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Usage of program
+
+.SH SEE ALSO
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Elia Ribaldone

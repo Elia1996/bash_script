@@ -190,6 +190,10 @@ check_file () {
    fi
 }
 
+Usage_sepf () {
+	   echo "sepf -f file_name -d dest_file -p Y,YMB -n 10,1996 [OPTION]"
+	   echo "man_sepf for man"
+}
 
 sepf () {
 	# Sub Elaborate Parametric File
@@ -236,7 +240,7 @@ sepf () {
 			-n|--par_val)
 				# -n 10,20,12
 				if [[ $par_names = 0 ]];then
-					echo "	Errore parametri sbagliati"; Usage; exit 1
+					echo "	Errore parametri sbagliati"; Usage_sepf; exit 1
 				fi
 				set -f; IFS=","
 				par_values=($2)
@@ -250,7 +254,7 @@ sepf () {
 				# -o
 				if [[ $script_nm_out != 0 ]]; then 
 					echo "	Errore, l'overwrite richiede solo il parametro -f"
-					Usage
+					Usage_sepf
 					exit 1
 				fi
 				overwrite=1
@@ -261,7 +265,7 @@ sepf () {
 				break;;
 			*)
 				echo "Errore, parametri sbagliati";
-				Usage; 
+				Usage_sepf; 
 				exit 1;;
 		esac
 	done

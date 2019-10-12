@@ -25,7 +25,7 @@ rm supp.txt
 
 script_name=${0:2}
 current_dir=$(pwd)
-for manpage in $(ls -al | grep ^- | awk '{print $9}'); do
+for manpage in $(ls -l | grep ^- | awk '{print $9}' | grep -v "\w\.\w"); do
 	if [ $manpage != $script_name ];then
 		c=$(cat ~/.bash_aliases | grep "man_$manpage")
 		# prendo tutti i file della directory tranne il file di script corrente

@@ -53,7 +53,7 @@ execute () {
 	save $1
 }
 vsim_exe () {
-   sh ~/script/modelsim_script/auto_vsim.sh $1
+   sh ~/script/modelsim_script/auto_vsim.sh -f $1
    save $1
 }
 
