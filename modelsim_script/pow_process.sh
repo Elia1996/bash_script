@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ~/script/lib/common.sh
+
 Usage () { 
 	echo -e "Usage: \n-f file -s signal1,signal2"
 } 

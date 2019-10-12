@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SDIR=~/script/modelsim_script
+
 ask_make_yesno () {
    # $1 answer 
    # $2 command to make
@@ -189,61 +191,115 @@ check_file () {
 }
 
 
-sub_elab_param_file () {
-	local help_str="
-		
-		SUBstitute and ELABorate a PARAMetric FILE
-		\$1 -> nome del file da modificare
-		\$2 -> nome del file di destinazione
-		\$3 -> -e  elabora anche
-			   -ne non elabora
-		Dal \$3 in poi sono coppie di:
-			1) nome del parametro
-			2) valore ad esso associato
-		La funzione sostituisce i parametri e poi lancia uno script awk che
-		va ad eseguire e sostituire tutti i costrutti del tipo \$([^)]*) in 
-		modo che se necessario si possano fare operazioni con i valori all'
-		interno delle parentesi, queste operazioni verranno eseguite e
-		sostituite con il loro valore alla luce dei valori passati come
-		argomento.
+sepf () {
+	# Sub Elaborate Parametric File
+	TEMP=`getopt -o :vf:d:ep:n:o --long verbose,file:,dest:,elaborate,par_name:,par_val:,overwrite -- "$@"`
+	eval set -- "$TEMP"
+	echo $@
+	
+	## variabili #############
+	elab=0
+	verbose=0
+	script_nm=0
+	script_nm_out=0
+	par_names=0
+	par_values=0
+	overwrite=0
+	#########################
+	while true; do
+		case $1 in
+			-v|--verbose)
+				# -v
+				verbose=1; shift
+				;;
+			-f|--file)
+				# -f file_name
+				check_file $2 "	-f file not found $2"
+				script_nm=$2
+				Print_verbose "	Script file: $2" $verbose; shift 2
+				;;
+			-d|--dest)
+				# -d file_name
+				script_nm_out=$2;
+				Print_verbose " Script out file: $2" $verbose; shift 2
+				;;
+			-e|--elaborate)
+				# -e 
+				elab=1; shift
+				;;
+			-p|--par_name)
+				# -p par_name1,par_name2,par_name3
+				set -f; IFS=","
+				par_names=($2)
+				Print_verbose " Parmeter name: ${par_names[*]}" $verbose; shift 2
+				;;
+			-n|--par_val)
+				# -n 10,20,12
+				if [[ $par_names = 0 ]];then
+					echo "	Errore parametri sbagliati"; Usage; exit 1
+				fi
+				set -f; IFS=","
+				par_values=($2)
+				if [[ ${#par_values[*]} -ne ${#par_names[*]} ]]; then
+					echo "	Il numedo"
+				fi
+				Print_verbose "	Parameter values: ${par_values[*]}" $verbose
+				shift 2
+				;;
+			-o|--overwrite)
+				# -o
+				if [[ $script_nm_out != 0 ]]; then 
+					echo "	Errore, l'overwrite richiede solo il parametro -f"
+					Usage
+					exit 1
+				fi
+				overwrite=1
+				Print_verbose " Overwrite set" $verbose
+				shift 1
+				;;
+			--)
+				break;;
+			*)
+				echo "Errore, parametri sbagliati";
+				Usage; 
+				exit 1;;
+		esac
+	done
+	Print_verbose "###  End of argument  ####" $verbose
 
-	"
-	check_file $1 $help_str
-	script_nm=$1
-	script_nm_out=$2
-	case $3 in
-		-e)
-			elab=1;;
-		-ne)
-			elab=0;;
-		*)
-			echo "Errore, manca il flag sull'elaborazione -e o -ne";;
-	esac
-	shift # elimino script_nm
-	shift # elimino script_nm_out
-	shift # elimino il flag di elaborazione
-	if test $(($#%2)) -ne 0; then
-		echo "Errore, gli argomenti parametrici non sono pari"
-		echo "$help_str"
-		exit
+	if [[ $overwrite = 0 ]]; then 
+		cp $script_nm $script_nm_out; 
+	else
+		script_nm_out=script_nm;
 	fi
-	cp $script_nm $script_nm_out
+
+	Print_verbose "		number of param: ${#par_names[*]}" $verbose
+
+	 echo ${par_names[$i]}
 	# ciclo finchè ci sono parametri
-	while test $# -gt 1; do
-		#echo "----------------arg: "$@
+	for (( i=0; i<${#par_names[*]}; i++)) ; do
+		Print_verbose "		param: ${par_names[$i]} ${par_values[$i]}" $verbose
 		# sostituisco il parametro
-		cat $script_nm_out | sed "s/$1/$2/g" > supp.txt
+		cat $script_nm_out | sed "s/\<${par_names[$i]}\>/${par_values[$i]}/g" > supp.txt
 		# ricopio il file in quello finale
 		cat supp.txt > $script_nm_out 
 		# elimino gli ultimi due parametri
-		shift
-		shift
 	done
+	
 	if [[ $elab = 1 ]]; then
+		cat $script_nm_out
+		Print_verbose "		Elaboration $script_nm_out" $verbose
 		#eseguo lo script awk che esegue le espressioni dentro le $()
 		/usr/bin/gawk -f ~/script/lib/expand-inline.sh $script_nm_out > supp.txt
 		cat supp.txt > $script_nm_out
 		# cancello il file di supporto
 		rm supp.txt
 	fi
+}
+
+Print_verbose () {
+	   # stampa $1 solo se $2 = 1
+	   if [[ $2 = 1 ]]; then
+		   echo -e "$1\n"
+		fi
 }

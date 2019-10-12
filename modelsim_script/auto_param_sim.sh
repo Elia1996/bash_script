@@ -36,6 +36,17 @@ help_str="
 source ~/script/lib/common.sh
 
 # FUNZIONI  #############
+Print () {
+	# stampa $1 solo se verbose = 1
+	if [[ $verbose = 1 ]];then
+		echo $1
+	fi
+}
+
+Usage () {
+	echo -e "Usage:\n	auto_param_sim -e/-g -p param_name [opzioni]\n	See man_auto_param_sim for man"	   
+}
+
 execute () { 
 	$programma $1
 	#rm "$script_name_supp.do"
@@ -53,50 +64,131 @@ save () {
 	cat -n $1
 }
 
+# 	CONTROLLI   ##############################################
+if test $# -lt 4;then
+	echo "Errore pochi argomenti" 1>&2
+	Usage
+	exit 1
+fi
+
+# SCRIPT ##################################################à
+
+# salvo gli argomenti per processarli
+TEMP=`getopt -o :hf:g:e:s:c:p --long help,file:,gen:,exe:,step:,custom:,param: -- "@$"`
+# risetto gli argomenti da linea di comando
+eval set -- "$TEMP"
+
+#### parametri #####
+flag_delete_script=0
+verbose=0
 # cartella degli script
 CDIR=~/script/modelsim_script
-# 	CONTROLLI   ###########
-if test $# -lt 4;then
-	if test $(is_help $1) -eq 1 ;then echo "$help_str"; fi
-	echo "Errore pochi argomenti"
-	exit
-fi
+####################
 
-# elimino l'estensione del parametro
-script_name=$(echo $1 | cut -d "." -f 1)
-estens=$(echo $1 | cut -d "." -f 2)
+# ciclo sugli argomenti da linea di comando ordinati
+while true; do
+	case $1 in 
+		-g|--gen)
+			func_for_exec=save; shift 2
+			Print "	-g"
+			;;
+		-e|--exe)
+			Print "	-exe"
+			case $2 in
+				vsim)
+					Print "		execution with vsim program"
+					func_for_exec=vsim_exe
+					programma=0;;
+				*)
+					Print "		execution with custom program"
+					func_for_exec=execute
+					programma=$2;;
+			esac
+			shift 2
+			;;
+		-v|--verbose)
+			verbose=1; shift 2;
+			Print "OPTION"
+			Print "	-verbose"
+			;;
+		-s|--step)
+			Print "	-step"
+			# I set comma as field separator in order to divide parameter
+			set -f; IFS=","
+			arg=($2)
+			narg=${#arg[@]}
+			# controllo del numero di parametri
+			if test $narg -ne 3; then
+				echo "Errore nell'opzione -s, -h per l'help"    
+				exit
+			fi
+			
+			par_name=${arg[0]}
+			start=${arg[1]}
+			step=${arg[2]}
+			end=${arg[3]}
+			Print "		param_name= $par_name"
+			Print "		start= $start"
+			Print "		step= $step"
+			Print "		end= $end"
+			Print "      ------> di seguito i bellissimi file generati"
+			for i in $(seq $start $step $end);do
+				sub_elab_param_file $script_name.$estens\
+				"$script_name-$par_name-$i.$estens" -e\
+				$par_name $i
+				# funzinone per l'eventuale simulazione immediata
+				$func_for_exec "$script_name-$par_name-$i.$estens"
+			done
+			if test $flag_delete_script -eq 1; then
+				rm $script_name.$estens
+			fi
+			shift 5
+			Print "      ------> elaborazione a step eseguita"
+			exit
+			;;
+		-c|--custom)
+			Print "	--custom"
+			# opzione del tipo -c par_name=2,3,4,5
+			# I set comma as field separator in order to divide parameter
+			set -f; IFS="="
+			arg=($2)
+			narg=${#arg[@]}
+			if test $narg -lt 2; then
+				echo "Errore nell'opzione -c, -h per l'help"
+				exit
+			fi
+			# parametro da modificare
+			par_name=${arg[0]}
+			set -f; IFS=","
+			par_values=(${arg[1]})
 
-# controllo che esista lo script
-if ! test -f $1; then
-	echo "Errore, lo script $1 non esiste"
-	exit
-fi
-shift
-
-case $1 in 
-	-gen)
-		func_for_exec=save
-		;;
-	-exe)
-		case $2 in
-			vsim)
-				func_for_exec=vsim_exe
-				programma=0;;
-			*)
-				func_for_exec=execute
-				programma=$2;;
-		esac
-		shift
-		;;
-	 *)
-	 	error_print $help_str
-	 	exit
-		;;
-esac
-shift
+			Print "      ------> di seguito i bellissimi file generati"
+			# ciclo sui parametri
+			for value in ${par_values[*]};do
+				sub_elab_param_file $script_name.$estens\
+				"$script_name-$par_name-$value.$estens" -e\
+				$par_name $value
+				# funzinone per l'eventuale simulazione immediata
+				$func_for_exec "$script_name-$par_name-$value.$estens"
+				shift
+			done
+			echo "      ------> elaborazione custom eseguita"
+			if test $flag_delete_script -eq 1; then
+				rm $script_name.$estens
+			fi
+			exit
+			;;
+		--)
+			break;;
+		 *)
+		 	error_print "Argomenti sbagliati"
+			Usage
+		 	exit 1
+			;;
+	esac
+done
 
 
-flag_delete_script=0
 echo "----- creazione figa di file parametrici per simulazioni ieaaaa -----"
 while test $# -ge 1; do
 	# vedo se è l'ultima opzione
@@ -115,32 +207,6 @@ while test $# -ge 1; do
 	
 	# ciclo sul parametro in questione
 	case $1 in
-		-s)
-			# controllo del numero di parametri
-			if test $narg -ne 4; then
-				echo "Errore nell'opzione -s, -h per l'help"    
-				exit
-			fi
-			
-			par_name=$2
-			start=$3
-			step=$4
-			end=$5
-			echo "      ------> di seguito i bellissimi file generati"
-			for i in $(seq $start $step $end);do
-				sub_elab_param_file $script_name.$estens\
-				"$script_name-$par_name-$i.$estens" -e\
-				$par_name $i
-				# funzinone per l'eventuale simulazione immediata
-				$func_for_exec "$script_name-$par_name-$i.$estens"
-			done
-			if test $flag_delete_script -eq 1; then
-				rm $script_name.$estens
-			fi
-			shift; shift; shift; shift; shift
-			echo "      ------> elaborazione a step eseguita"
-			exit
-			;;
 		-c)
 			if test $narg -lt 2; then
 				echo "Errore nell'opzione -c, -h per l'help"
@@ -168,7 +234,7 @@ while test $# -ge 1; do
 			if test $narg -ne 2; then
 				echo "Errore nell'opzione -p, -h per l'help"
 				exit
-			fi
+		i	fi
 			# tolgo l'opzione
 			shift
 			# salvo il nome del parametro

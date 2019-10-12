@@ -1,0 +1,41 @@
+.\"~/script/lib/sepf.sh
+.\" Manpage for sepf
+.\" Contact ribaldoneelia@gmail.com to correct errors or typos
+.TH man 1 "12/10/2019" "1.0" "sepf man page"
+.SH NAME
+sepf \- Sub Elaborate Parametric File
+.SH SYNOPSIS
+sepf -f [OPZIONI] source_file -d dest_file -p param_name -n par_val [OPZIONI]
+!!!! this program is anly available as a function  in the file ~/script/lib/common.sh, so to use this program in a script please insert "source ~/script/lib/common.sh" in your script !!!!
+.SH DESCRIPTION
+sepf is a program to elaborate a file with some variable, this variable are selected using \<var_name\> regex, this means that are detected only variable which are single word with only "non-word" in boudary. (e.g. if YMB is the name of variable and we have this two text: T1="Hello I born in YMB and i will die in $(YMB+100)" and T2="Hello I born in YMB's", in T1 expression YMB is detected in both cases, but in T2 It isn't detected because YMB is followed by a "word" that in this example is "'").
+This program doesn't only replace multiple variable in text but can elaborate expression in $() parentesys and replace It real value in text, for example in above example if YMB is 1990 after substitution of 1990 we have $(1990+100) but after elaboration we will have 2090.
+.TP
+\fB\-f\fR, \fB\-\-file\fR
+Input file whith parameter that can be simply a word or an expression ad $(C+D)where C and D are two variable
+.TP
+\fB\-d\fR, \fB\-\-dest\fR
+Destination file that could be omitted if -o option is given
+.TP
+\fB\-p\fR, \fB\-\-par_name\fR
+Parameter name, this could be a sequence of parameter in the following form: -p A,Y,D where A,Y and D are parameter. All these parameter will be substituted with -n argument value.
+.TP
+\fB\-n\fR, \fB\-\-par_val\fR
+Parameter value, these should be in the same order of parameter name, e.g. the first -p argument will have the same value of the first -n argument.
+.SH OPTION
+The only option that should be put before compulsory argument is -v, otherwise the report of program isn't complete.
+.TP 
+\fB\-v\fR, \fB\-\-verbose\fR
+This option print program step of work.
+.TP
+\fB\-e\fR, \fB\-\-elaborate\fR
+This option evaluate all $() statement in file after the substitution of varable.
+.TP
+\fB\-o\fR, \fB\-\-overwrite\fR
+Normally the original file is firstly copied in dest file, then substitution is applied and finally the elaboration. If user want to delete old file with parameter can use this option that apply all modify directly to -f file given, -d file must not be given.
+.SH SEE ALSO 
+
+.SH BUGS
+No Known bugs.
+.SH AUTHOR
+Elia Ribaldone
