@@ -1,0 +1,99 @@
+#!/bin/bash
+#
+# Script to setup environment variable for Synopsys 2007.03
+#History:
+#28/05/2007 First Release 1.0 (sergio.tota@polito.it)
+#
+echo "******************************************************"
+echo "CAD-Lab Server Synopsys Initialization Environment"
+echo "Dipartimento di Elettronica"
+echo "Politecnico di Torino"
+echo "******************************************************"
+
+# Synopsys software tree root
+#
+#echo "Synopsys main dir : /software/synopsys"
+export SYNOPSYS_ROOT=/software/synopsys
+#
+#Setup Installer
+echo "Current Synopsys Installer version : 1.6"
+export PATH=$SYNOPSYS_ROOT/installer_current:$PATH
+#
+#
+# Setup documentation
+#
+echo "Current SOLD (Synopsys OnLine Documentation) version : 2007.03"
+echo "To invoke the Online documentation use the command: sold"
+echo "(Students should HEAVILY use the documentation!!!!!!)"
+#alias sold=$SYNOPSYS_ROOT/sold_current/sold
+export PATH=$PATH:$SYNOPSYS_ROOT/sold_current
+#
+# Setup synthesis
+#
+echo "Current DesignVision/DesignCompiler version : 2007.03-SP1"
+echo "To run Design_Vision (tcl mode only): design_vision-xg"
+echo "To run Design_Compiler (tcl mode only): dc_shell-xg-t"
+export SYNOPSYS=$SYNOPSYS_ROOT/syn_current
+export SYNOPSYS_FPGA=$SYNOPSYS_ROOT/dc_fpga_current
+export PATH=$SYNOPSYS/linux/syn/bin:$SYNOPSYS_FPGA/linux/syn/bin:$PATH
+#
+# Setup simulation
+#
+#echo "Current simulation(SCIROCCO) version : 2002.06-6"
+#export SYNOPSYS_SIM=$SYNOPSYS_ROOT/sim_current
+#export VIRSIMHOME=$SYNOPSYS_SIM/virsimGUI
+#export MANPATH=$MANPATH:$SYNOPSYS_SIM/doc/sim/man:$SYNOPSYS_SIM/doc/snps_tcl/man
+#export PATH=$SYNOPSYS_SIM/bin:$SYNOPSYS_SIM/linux/virsimGUI/Linux/bin:$PATH
+#export LD_LIBRARY_PATH=$SYNOPSYS_SIM/linux/virsimGUI/Linux/lib:$SYNOPSYS_SIM/linux/sim/lib:$LD_LIBRARY_PATH
+#
+# Setup FPGA Compiler
+#
+#export PATH=$SYNOPSYS_ROOT/fc2/fpga_compiler2/bin:$PATH
+#
+# Setup Rail Mill
+#
+#export PATH=$SYNOPSYS_ROOT/rm/sparcOS5/rm/bin:$PATH
+#
+# Setup Arcadia
+#
+#export PATH=$SYNOPSYS_ROOT/arc/sparcOS5/arc/bin:$PATH
+#
+# Setup Prime Time
+#
+#echo "Current PrimeTime version : 2006.06"
+#export PATH=$SYNOPSYS_ROOT/pt_current/linux/syn/bin:$PATH
+#
+# Setup Power Mill
+#
+#export PATH=$SYNOPSYS_ROOT/pm/sparcOS5/pm/bin:$PATH
+#
+# Setup Cocentric System Studio
+#
+#export PATH=$SYNOPSYS_ROOT/css_current/linux/ccss/bin:$PATH
+#export SYNOPSYS_CCSS=$SYNOPSYS_ROOT/css_current/linux/ccss
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$SYNOPSYS_ROOT/lib
+#export SNPS_ARCH=gccsparcOS5
+#export TARGET_ARCH=gccsparcOS5
+#
+#Setup Astro
+#
+#echo "Current Astro version : 2003.09-SP2"
+#export PATH=$SYNOPSYS_ROOT/astro_current/bin/IA.32:$PATH
+#
+#Setup PrimePower
+#echo "Current PrimePower version : 2005.06"
+#export PATH=$SYNOPSYS_ROOT/pp_current/linux/syn/bin:$PATH
+#Smart Models Libraries HOME Dir
+#export LMC_HOME=/export/software2/synopsys/R41_SmartModels
+#
+# Setup HSPICE
+#
+echo "Current HSPICE version : 2007.03"
+export PATH=$SYNOPSYS_ROOT/hspice_current/hspice/bin:$SYNOPSYS_ROOT/hspice_current/hspice/linux:$PATH
+#
+# Setup licensing
+#
+
+export LM_LICENSE_FILE=29000@localhost
+#echo "To switch to older versions please customize this script"
+#

@@ -1,0 +1,12 @@
+#!/bin/bash
+#
+# Script to setup environment for tce 1.4
+#
+echo
+echo "Initializing environment..."
+echo
+TCE_INSTALL_DIR=/software/tce/tce-1.4
+LLVM_INSTALL_DIR=$TCE_INSTALL_DIR/llvm-2.9
+export PATH=$TCE_INSTALL_DIR/bin:$LLVM_INSTALL_DIR/bin:$PATH
+echo
+

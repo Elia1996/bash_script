@@ -1,0 +1,13 @@
+#!/bin/bash
+export MODEL_TECH=/software/mentor/ams_2008.1_64/modeltech
+export LM_LICENSE_FILE=1717@led-x3850-3.polito.it:1717@vlsiwall.polito.it
+export anacad=/software/mentor/ams_2008.1_64
+export MGC_AMS_HOME=/software/mentor/ams_2008.1_64
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$anacad/lib
+export PATH=$anacad/bin:$MODEL_TECH:$PATH
+#source $anacad/com/init_anacad.ksh
+source $anacad/com/ams_runtime_setup.ksh
+#export LD_ASSUME_KERNEL=2.4.1
+#export LM_LICENSE_FILE=/home/mario/testadms/license.dat
+echo "ADMS ready to run with : 'vasim' . "
+

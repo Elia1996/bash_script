@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Script to setup environment for Modeltech Modelsim (Linux)
+#
+echo
+echo "Initializing environment..."
+echo
+INSTALL_DIR=/software/mentor/modelsim_6.2g
+export PATH=$INSTALL_DIR/linux:$PATH
+export LM_LICENSE_FILE=1717@vlsiwall.polito.it
+echo
+echo "The tool can be started with the command 'vsim'"
+echo
+

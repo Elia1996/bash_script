@@ -286,3 +286,4 @@ On_ICyan='\e[0;106m'    # Ciano
 On_IWhite='\e[0;107m'   # Bianco
 
 export BASHLIB="/home/tesla/Scrivania/Progetti_work/bash_script/lib/common.sh"
+~/script/set_linux/conf_file/.initbash.user

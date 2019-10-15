@@ -1,0 +1,9 @@
+export LM_LICENSE_FILE=5280@led-x3850-3.polito.it
+export CDS_LIC_FILE=$LM_LICENSE_FILE
+
+# START_CDS INNOVUS
+export CDS_INNOVUS=/software/cadence/INNOVUS/INNOVUS17.11
+export PATH="${PATH}:${CDS_INNOVUS}/bin"
+alias help_cds_innovus='$CDS_INNOVUS/tools/bin/cdnshelp &'
+# innovus
+# END_CDS INNOVUS

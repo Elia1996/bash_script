@@ -1,0 +1,37 @@
+
+###
+### SETTING PROMPT AND ALIASES
+###
+
+#PS1='\u@\h:\w\> '
+
+#alias helpvhdl='evince /home/mariagrazia.graziano/manuals/VHDL-Cookbook.pdf'
+#alias helphspice='evince /software/synopsys/hspice_2007.03/hspice/docs/hspice_sa.pdf'
+#alias helpeldo='evince /software/mentor/ams_2008.1_64/docs/pdfdocs/eldo_ur.pdf'
+#alias helpenc='evince /home/mariagrazia.graziano/ms/cap5/soceUG.pdf'
+#alias helpenc='evince /home/mariagrazia.graziano/manuals/encounter.pdf'
+#alias ls='ls -F --color=auto'
+#alias ll='ls -l --color=auto'
+#alias la='ls -a --color=auto'
+
+
+###
+### SETTING ENVIROMENT VARIABLES
+###
+alias setmentorOLD='source /script/set_linux/conf_file/init_msim6.2g'
+alias setmentor='source /script/set_linux/conf_file/init_msim6.5c'
+alias setsynopsys='source /script/set_linux/conf_file/init_synopsys_64.11'
+alias setsynopsys18='source /script/set_linux/conf_file/init_synopsys_64.18'
+alias setsoc='source /script/set_linux/conf_file/init_soc33'
+alias setedi='source /script/set_linux/conf_file/old/init_edi13'
+alias setinnovus='source /script/set_linux/conf_file/init_innovus17.11'
+#alias setcadence='source /script/set_linux/conf_file/init_ic5.0.33'
+#alias setcadence='source /script/set_linux/conf_file/init_ic5.1_testing'
+#alias setise='source /script/set_linux/conf_file/init_ise9.1'
+alias seteldo='source /script/set_linux/conf_file/init_ams2008.1'
+
+#####  SETTING PATH TO LIBRARIES
+##
+export ST_HSPICE_LIB=~/script/set_linux/conf_file/lib_spice
+
+

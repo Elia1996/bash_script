@@ -1,0 +1,35 @@
+export SOC_HOME=/software/cadence/SOC33.USR2/lnx86
+export export SE_HOME=$SOC_HOME
+export CADMOSHOME=$SE_HOME/tools/celtic
+export PLATO_HOME=$SE_HOME/tools/plato
+export PKS_HOME=$SE_HOME/BuildGates/version
+export ENCOUNTER=$SE_HOME
+export SIMPLEX_HOME=/software/cadence/SEV4.1
+export LD_LIBRARY_PATH=$SIMPLEX_HOME/linux_x86/lib/gcc31:$LD_LIBRARY_PATH
+export PATH=$SIMPLEX_HOME/bin:$PATH
+export PATH=$SE_HOME/tools/bin:$SE_HOME/tools/dsm/bin:$PATH
+export PATH=$PLATO_HOME/bin:$PLATO_HOME/../bin:$PATH
+export PATH=$PKS_HOME/bin:$PATH
+export PATH=$ENCOUNTER/tools/bin:$ENCOUNTER/tools/fe/bin:$PATH
+export TOOLBOX=/software/cadence/SEV4.1/toolbox/bin
+export PATH=$TOOLBOX:$PATH
+export LM_LICENSE_FILE=5280@localhost
+export CDS_LIC_FILE=$LM_LICENSE_FILE
+#export LD_LIBRARY_PATH=$HOME/lib:$HOME/usr/lib:/lib:/usr/lib:/usr/local/lib
+# Reports the versions of the various tools
+echo "-----------------------------------------------------------------------"
+encounter -version
+#echo "-----------------------------------------------------------------------"
+#sedsm -version
+echo "-----------------------------------------------------------------------"
+sroute -version
+echo "-----------------------------------------------------------------------"
+wroute -version
+echo "-----------------------------------------------------------------------"
+pks_shell -version
+echo "-----------------------------------------------------------------------"
+celtic -version
+echo "-----------------------------------------------------------------------"
+nanoroute -version
+echo "-----------------------------------------------------------------------"
+

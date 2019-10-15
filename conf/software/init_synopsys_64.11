@@ -1,0 +1,6 @@
+export SYNOPSYS_ROOT=/software/synopsys
+export PATH=$PATH:$SYNOPSYS_ROOT/sold_current
+export SYNOPSYS=$SYNOPSYS_ROOT/syn_current_64.11
+export PATH=$SYNOPSYS/bin:$PATH
+
+export LM_LICENSE_FILE=27020@led-x3850-3.polito.it
