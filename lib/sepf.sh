@@ -135,7 +135,7 @@ if [[ $elab = 1 ]]; then
 	Print_verbose "############################################" $verbose
 	Print_verbose "	Elaboration $script_nm_out" $verbose
 	#eseguo lo script awk che esegue le espressioni dentro le $()
-	/usr/bin/gawk -f ~/script/lib/expand-inline.sh $script_nm_out > supp.txt
+	/usr/bin/gawk -f ~/script/lib/expand-inline.gawk $script_nm_out > supp.txt
 	cat supp.txt > $script_nm_out
 	# cancello il file di supporto
 	rm supp.txt

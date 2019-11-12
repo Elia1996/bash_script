@@ -1,13 +1,6 @@
-#!/usr/bin/gawk -f
-{
-	# i find all $(.*) statement and save it in arr
-	match($0,/\$\([^\)]*\)/,arr);
-	while (length(arr)!=0){ 
-		cmd=substr(arr[0],3,length(arr[0])-3); 
-		newcmd="echo $(("cmd"))"
-		newcmd | getline var
-		sub(/\$\([^\)]*\)/,var,$0) 
-		match($0,/\$\([^\)]*\)/,arr)
-	}
-	{print }
-}
+#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+echo $DIR
+echo "${BASH_SOURCE[0]}"
+echo "$( dirname "${BASH_SOURCE[0]}""
+/usr/bin/gawk -f ~/script/lib/expand-inline.gawk $1

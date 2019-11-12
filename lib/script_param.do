@@ -9,6 +9,6 @@ add wave \{sim:/testcount/ucounter1/ctmp}
 add wave \{sim:/testcount/ucounter1/stmp}
 add wave \{sim:/testcount/ucounter1/stmpsync}
 power add /testcount/UCOUNTER1/*
-run $(NCICLI*TCLK)ns
-#power report -file pow$(NCICLI*TCLK)ns_rep_NCICLI_TCLKns.txt
+run $(10*30)ns
+#power report -file powns_rep_NCICLI_TCLKns.txt
 
