@@ -1,4 +1,4 @@
-.\"~/script/modelsim_script/auto_vsim.sh
+.\"modelsim_script/auto_vsim.sh
 .\" Manpages for auto_vsim
 .\" contact ribaldoneelia@gmai.com	to correct bugs
 .TH man 1 "12/10/2019" "1.0" "auto_vsim man page"

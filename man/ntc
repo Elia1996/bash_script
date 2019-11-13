@@ -1,4 +1,4 @@
-.\"~/script/lib/ntc.sh
+.\"lib/ntc.sh
 .\" Manpage for ntc
 .\" Contact ribaldoneelia@gmail.com to correct errors or typos
 .TH man 1 "12/10/2019" "1.0" "ntc man page"

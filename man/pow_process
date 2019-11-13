@@ -1,4 +1,4 @@
-.\"~/script/lib/sepf.sh
+.\"lib/sepf.sh
 .\" Manpage for sepf
 .\" Contact ribaldoneelia@gmail.com to correct errors or typos
 .TH man 1 "12/10/2019" "1.0" "sepf man page"

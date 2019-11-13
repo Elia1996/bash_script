@@ -307,3 +307,13 @@ Print_verbose () {
 		   echo -e "$1\n"
 		fi
 }
+
+auto_vsim () {
+	/media/tesla/Storage/Linux/Scrivania/Progetti/My_code_project/bash_script/modelsim_script/auto_vsim.sh $@
+}
+ntc () {
+	/media/tesla/Storage/Linux/Scrivania/Progetti/My_code_project/bash_script/lib/ntc.sh $@
+}
+pow_process () {
+	/media/tesla/Storage/Linux/Scrivania/Progetti/My_code_project/bash_script/lib/sepf.sh $@
+}
