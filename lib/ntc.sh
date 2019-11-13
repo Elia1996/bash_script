@@ -224,6 +224,7 @@ conv (){
 	else
 		Print_verbose "number"
 		n_col=1	
+		file_num=$(echo $file_num | tr ";" " ")
 		fp=$file_num
 	fi
 
@@ -283,7 +284,7 @@ bindec () {
 ##################################################################
 # binary to exadecimal
 # converte un numero binario in esadecimale
-binexa () {
+binhex () {
 	ca2=$1 # IGNORATO 
 	p_intera=$2 # IGNORATO
 	n_bit=$3
@@ -380,7 +381,7 @@ decbin () {
 
 #############################################################à##
 # decimale -> esadecimale
-decexa () {
+dechex () {
 	ca2=$1	
 	p_intera=$2
 	n_bit=$3
@@ -401,7 +402,7 @@ decexa () {
 
 ################################################################
 # hhex to bin
-exabin () {
+hexbin () {
 	ca2=$1	
 	p_intera=$2
 	n_bit=$3
@@ -419,7 +420,7 @@ exabin () {
 
 ###############################################################
 # exa to decimal
-exadec () {
+hexdec () {
 	ca2=$1	
 	p_intera=$2
 	n_bit=$3
@@ -431,7 +432,7 @@ exadec () {
 	if [[ $p_intera -eq -1 ]]; then
 		let p_intera=n_bit
 	fi
-	b_num=$(exabin $ca2 $p_intera $n_bit $num)
+	b_num=$(hexbin $ca2 $p_intera $n_bit $num)
 	d_num=$(bindec $ca2 $p_intera $n_bit $b_num)
 	echo $d_num
 }
@@ -522,10 +523,11 @@ fi
 Print_verbose " $f_flag $conv_type $ca2 $p_intera $n_bit $file_num"
 conv $f_flag $conv_type $ca2 $p_intera $n_bit $file_num
 #bindec
-#binexa
+#binhex
 #decbin
-#binexa
-#exabin
+#binhex
+#hexbin
+#hexdec
 
 if [[ $n_flag -eq 1 ]]; then
 	echo ""

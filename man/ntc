@@ -1,0 +1,54 @@
+.\"~/script/lib/ntc.sh
+.\" Manpage for ntc
+.\" Contact ribaldoneelia@gmail.com to correct errors or typos
+.TH man 1 "12/10/2019" "1.0" "ntc man page"
+.SH NAME
+ntc \- Number Conversion Tool
+.SH SYNOPSIS
+sepf -t conversion_type [-n|-f] file|number [OPTION]
+!!!! this program is anly available as a function  in the file ~/script/lib/common.sh, so to use this program in a script please insert "source ~/script/lib/common.sh" in your script !!!!
+
+
+.SH DESCRIPTION
+ntc is a program to convert number between different bases, at the moment conversion are possible between three type of number: 'bin' binary number that can be fixed point and CA2 too, 'dec' decimal number that can be positive, negative and fixed point, 'hex' hexadecimal number. The composition of two of these tre number create a 'type of conversion' (example bindec, decexa etc).
+
+.TP
+\fB\-f\fR, \fB\-\-file\fR [file to convert]
+This option exclude -n option because input will be a file, this file could be orgainized in column, each column of file will be analyzed and decoded file will be printed in the same format to stdout
+
+.TP
+\fB\-n\fR, \fB\-\-number\fR [number1;number2;number3...]
+This option exclude -f option because will be passed a single number od a list of numbers directly in command, each numbers shuld be divided by semicolon.
+
+.TP
+\fB\-t\fR, \fB\-\-type\fR [bindec|binhex|decbin|dechex|hexbin|hexdec]
+The first part of name passed is related to input number format (decbin means that decimal number will be passed), the second is related to output number, so bindec will be convert input binary number in decimal number.
+
+
+.SH OPTION
+The only option that should be put before compulsory argument is -v, otherwise the report of program isn't complete.
+
+.TP 
+\fB\-v\fR, \fB\-\-verbose\fR
+This option print program step of work.
+
+.TP
+\fB\-c\fR, \fB\-\-ca2\fR 
+This option is used to comunicate program that number are in ca2 complement, unless specified number are consider without sign
+
+.TP
+\fB\-b\fR, \fB\-\-bit_number\fR [number|p.f]
+This option said to program the number of bit to use, is mandatory in decbin and decexa, if are used 'p.f' notation number is assumed fractional and with 'p' bit of integer part and with 'f' bit of fractional part (this type of notation avoid to use -p option and speed up typing)
+
+.TP
+\fB\-p\fR, \fB\-\-p_intera\fR [number]
+This option said to program that number are fractional and indicate the number of bit of integer part.
+
+.SH EXAMPLE
+ntc -c -b 2.10 -t binhex -n 101010100011
+tis number will be interpretated as 10.1010100011
+
+.SH BUGS
+No Known bugs.
+.SH AUTHOR
+Elia Ribaldone
